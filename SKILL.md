@@ -1,12 +1,12 @@
 ---
 name: ppt-casebook
-description: 城市设计/建筑学课程作业的「案例册 / 系统册 PPT 生成思路」——怎么从一个主题（绿化系统、运动系统、历史文化系统这类）一步步做出一本有说服力的册子。当用户要"做XX系统的PPT/案例册""把XX系统做成册子""找案例做成汇报PPT""这个案例该不该放、怎么翻译成我的方案"时使用。内置「方向分级推演」——用户出方向、AI 拆成 L1/L2/L3/L4 几个并列思路让用户点菜、选定后再走七步模板做 PPT；另有案例筛选与转化三招、唯一答案推导法。抓图/画图/排版等"技术层"细节走 urbandesign-analysis skill，本 skill 只负责"思路层"。
+description: 城市设计/建筑学课程作业的「案例册 / 系统册 PPT 生成思路」——怎么从一个主题（绿化系统、运动系统、历史文化系统这类）一步步做出一本有说服力的册子。当用户要"做XX系统的PPT/案例册""把XX系统做成册子""找案例做成汇报PPT""这个案例该不该放、怎么翻译成我的方案"时使用。内置「方向分级推演」——用户出方向、AI 拆成 L1/L2/L3/L4 几个并列思路让用户点菜、选定后再走七步模板做 PPT；另有案例筛选与转化三招、唯一答案推导法。另有抓图/画图/排版/坑清单等"技术层"细节（见 references/），单仓库自包含。
 agent_created: true
 ---
 
 # 案例册 / 系统册 PPT 生成思路
 
-帮用户（建筑/城市设计学生）把"一个主题"变成"一本能拿去汇报的册子"。这不是排版教程——排版、抓图、画图那些是"技术层"，由 `urbandesign-analysis` 管；**本 skill 管的是"思路层"：先写什么、案例挑哪几个、怎么把案例翻译成自己的方案。**
+帮用户（建筑/城市设计学生）把"一个主题"变成"一本能拿去汇报的册子"。本 skill 装"思路层"+"技术层"两部分：**思路层**管先写什么、案例挑哪几个、怎么把案例翻译成自己的方案；**技术层**（抓图/画图/排版/坑清单）放在 `references/` 里，需要时去查。
 
 ## 何时使用
 
@@ -93,7 +93,7 @@ agent_created: true
 - 例（绿化层的 +4.0m）：院墙 3.0m（用户量）＜ 架空层 ＜ 树冠底 4.0–4.5m（照片目测）→ 唯一窗口就是 **+4.0m**。低一点跨不过墙，高一点钻进树冠。
 - 操作顺序：① 先收集现场硬数字（尺寸、现状、能走通吗）② 列约束区间 ③ 取交集，交集往往就是唯一答案 ④ 把这条推导链写进册子，比直接给结论有力十倍。
 
-## 沟通衔接（跟 urbandesign-analysis 共用铁律）
+## 沟通衔接（沟通铁律）
 
 - **说白话**：术语当场解释，配生活化例子。
 - **先问再下结论**：只有现场/实地才能看到的（人的活动、空间怎么用、尺寸、颜色），先问，别从图上推断。
@@ -101,14 +101,19 @@ agent_created: true
 - **一阶段对齐**：册子分系统一册一册做，每册做完先停下来给用户确认，别一口气全做完。
 - 对话三段式：**我的理解 → 我的想法 → 需要你确认的**（只问现场能答的）。
 
-## 技术速查（细节走 urbandesign-analysis，这里只列命门）
+## 技术层（自包含，见本 skill 的 references/）
 
-- 抓图：Wikimedia Commons 走代理 `127.0.0.1:7890` 解除限流；ArchDaily 抓 `images.adsttc.com`；**Bing 图搜基本不可用**（搜具体项目名返回题材相近的烂图）。
-- 图片：找不到实景就自绘示意图，页脚标"示意图，非实测"。
-- 排版：python-pptx 不认 Markdown；中文字体要同时设 latin/ea/cs 三个字体槽；照片用 `cover()` 裁切铺满、图纸用 `fit()`。
-- 自检：用 WPS 演示的 COM 把 pptx 导出 PNG 逐张看，比靠代码猜版式靠谱。
-- 完整坑清单先读 `urbandesign-analysis` 的 `references/pitfalls.md`。
+- `references/case-images.md` — 案例抓图渠道（Commons/ArchDaily/政府官网…）与踩坑
+- `references/drawing.md` — PIL 自绘图技巧（坐标系/剖面/尺寸标注）
+- `references/ppt.md` — python-pptx 生成 + WPS 自检
+- `references/pitfalls.md` — 抓图/画图/排版的高频坑（**踩之前先看这个**）
+
+命门速记：抓图首选 Wikimedia Commons（走代理解除限流）、ArchDaily 抓 `images.adsttc.com`、Bing 图搜基本不可用；python-pptx 不认 Markdown、中文字体要设 latin/ea/cs 三槽；找不到实景就自绘示意图标"非实测"。
 
 ## 资源
 
-- `references/book-template.md` — 七步模板逐页规格 + 绿化册/运动册的真实范例（照着套）
+- `references/book-template.md` — 七步模板逐页规格 + 真实范例（照着套）
+- `references/case-images.md` — 案例抓图渠道
+- `references/drawing.md` — PIL 自绘图技巧
+- `references/ppt.md` — python-pptx 生成与 WPS 自检
+- `references/pitfalls.md` — 高频坑清单（踩之前先看）
